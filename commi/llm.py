@@ -14,16 +14,12 @@ TEMPERATURE = 0
 MAX_COMMIT_MESSAGE_LENGTH = 60
 
 
-def _read_system_prompt() -> str:
+def _build_prompt(diff: str) -> str:
     prompt = PROMT.read_text(encoding='utf-8').splitlines()
     content_lines = [
         line for line in prompt if line and not line.startswith('#')
     ]
-    return '\n'.join(content_lines).strip()
-
-
-def _build_prompt(diff: str) -> str:
-    system_prompt = _read_system_prompt()
+    system_prompt = '\n'.join(content_lines).strip()
     return f'{system_prompt}\n\nGit diff:\n\n{diff}\n\n'
 
 
@@ -94,7 +90,7 @@ def _normalize_commit_message(message: str) -> str:
     if not commit_type:
         return text
 
-    # Keep only characters allowed in the summary portion (ASCII word chars and hyphen).
+    # Summary may contain ASCII letters, digits, spaces, and hyphens only.
     summary = re.sub(r'[^a-z0-9 -]+', '', summary)
     summary = ' '.join(summary.split()).strip('- ').strip()
     if not summary:

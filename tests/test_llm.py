@@ -88,7 +88,7 @@ def test_generate_commit_message_normalizes_output(
 def test_generate_commit_message_keeps_unknown_commit_type(
     monkeypatch: MonkeyPatch,
 ) -> None:
-    """Should keep the model output when the type is not in a fixed allowlist."""
+    """Keep model output when commit type is not in the fixed allowlist."""
 
     class _UnknownTypeLlama(_FakeLlama):
         def create_completion(self, **_: object) -> dict[str, object]:
