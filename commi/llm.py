@@ -1,11 +1,11 @@
 """LLM integration based on llama-cpp-python."""
 
 import re
-from pathlib import Path
 from typing import Any, cast
 
 from llama_cpp import Llama
 
+from commi.constants import PROMT
 from commi.execptions import LlmError
 
 N_CTX = 4_096
@@ -20,10 +20,9 @@ MAX_COMMIT_MESSAGE_LENGTH = 60
 
 
 def _read_system_prompt() -> str:
-    prompt_path = Path(__file__).resolve().parent / 'PROMT.md'
-    prompt_lines = prompt_path.read_text(encoding='utf-8').splitlines()
+    prompt = PROMT.read_text(encoding='utf-8').splitlines()
     content_lines = [
-        line for line in prompt_lines if line and not line.startswith('#')
+        line for line in prompt if line and not line.startswith('#')
     ]
     return '\n'.join(content_lines).strip()
 
