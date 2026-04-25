@@ -26,6 +26,18 @@ class _FakeLlama:
         }
 
 
+def test_generate_commit_message_uses_mocked_llm(
+    monkeypatch: MonkeyPatch,
+) -> None:
+    """Generated message should be sanitized to one line."""
+    monkeypatch.setattr(llm_module, 'Llama', _FakeLlama)
+
+    message = llm_module.generate_commit_message(
+        diff='diff --git a/a.py b/a.py',
+        model_path='/model/commi_model.gguf',
+    )
+
+    assert message == 'feat: add commit title generation'
 
 
 def test_generate_commit_message_fails_on_empty_content(
