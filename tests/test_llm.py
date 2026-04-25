@@ -85,20 +85,20 @@ def test_generate_commit_message_normalizes_output(
     assert message == 'fix: correct issue'
 
 
-def test_generate_commit_message_falls_back_for_invalid_type(
+def test_generate_commit_message_keeps_unknown_commit_type(
     monkeypatch: MonkeyPatch,
 ) -> None:
-    """Should use fallback for invalid commit type."""
+    """Should keep the model output when the type is not in a fixed allowlist."""
 
-    class _InvalidTypeLlama(_FakeLlama):
+    class _UnknownTypeLlama(_FakeLlama):
         def create_completion(self, **_: object) -> dict[str, object]:
             return {'choices': [{'text': 'improve: make code better'}]}
 
-    monkeypatch.setattr(llm_module, 'Llama', _InvalidTypeLlama)
+    monkeypatch.setattr(llm_module, 'Llama', _UnknownTypeLlama)
 
     message = llm_module.generate_commit_message(
         diff='diff --git a/a.py b/a.py',
         model_path='/model/commi_model.gguf',
     )
 
-    assert message == 'chore: update files'
+    assert message == 'improve: make code better'
