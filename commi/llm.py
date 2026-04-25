@@ -1,41 +1,10 @@
 """LLM integration based on llama-cpp-python."""
 
-from types import MappingProxyType
 from typing import Any, cast
 
 from llama_cpp import Llama
 
-
-class LlmError(Exception):
-    """Raised when LLM generation fails."""
-
-    def __init__(self, error_key: str, detail: str = '') -> None:
-        """Set normalized error message by key."""
-        message = ERROR_MESSAGES[error_key]
-        if detail:
-            message = f'{message} Details: {detail}'
-        super().__init__(message)
-
-    @classmethod
-    def invalid_response(cls) -> 'LlmError':
-        """Create invalid response error."""
-        return cls('invalid_response')
-
-    @classmethod
-    def empty_message(cls) -> 'LlmError':
-        """Create empty message error."""
-        return cls('empty_message')
-
-    @classmethod
-    def empty_diff(cls) -> 'LlmError':
-        """Create empty diff error."""
-        return cls('empty_diff')
-
-    @classmethod
-    def generation_failed(cls, detail: str) -> 'LlmError':
-        """Create generation failed error."""
-        return cls('generation_failed', detail)
-
+from commi.execptions import LlmError
 
 SYSTEM_PROMPT = (
     'You are a helpful assistant that writes git commit messages. '
@@ -44,15 +13,7 @@ SYSTEM_PROMPT = (
 )
 N_CTX = 4_096
 MAX_TOKENS = 64
-TEMPERATURE = 0.2
-ERROR_MESSAGES = MappingProxyType(
-    {
-        'empty_diff': 'Diff is empty.',
-        'generation_failed': 'Failed to generate commit message.',
-        'invalid_response': 'LLM returned invalid response.',
-        'empty_message': 'Generated commit message is empty.',
-    },
-)
+TEMPERATURE = 0
 
 
 def _build_prompt(diff: str) -> str:

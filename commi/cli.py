@@ -6,14 +6,11 @@ from typing import NoReturn
 import typer
 
 from commi.constants import MODEL_PATH
-from commi.git_utils import GitError, create_commit, read_staged_diff
-from commi.llm import LlmError, generate_commit_message
+from commi.execptions import CommiRunError, GitError, LlmError
+from commi.git_utils import create_commit, read_staged_diff
+from commi.llm import generate_commit_message
 
 app = typer.Typer(add_completion=False)
-
-
-class CommiRunError(Exception):
-    """Raised when CLI run fails."""
 
 
 def _raise_error(message: str) -> NoReturn:

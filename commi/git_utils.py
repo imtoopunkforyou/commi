@@ -5,33 +5,11 @@ from typing import cast
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError
 
-
-class GitError(Exception):
-    """Base git error."""
-
-
-class GitRepositoryNotFoundError(GitError):
-    """Raised when current directory is not a git repository."""
-
-    def __init__(self) -> None:
-        """Set predefined error message."""
-        super().__init__('Current directory is not a git repository.')
-
-
-class GitDiffReadError(GitError):
-    """Raised when staged diff cannot be read."""
-
-    def __init__(self) -> None:
-        """Set predefined error message."""
-        super().__init__('Failed to read staged diff.')
-
-
-class GitCommitCreateError(GitError):
-    """Raised when commit cannot be created."""
-
-    def __init__(self) -> None:
-        """Set predefined error message."""
-        super().__init__('Failed to create commit.')
+from commi.execptions import (
+    GitCommitCreateError,
+    GitDiffReadError,
+    GitRepositoryNotFoundError,
+)
 
 
 def _open_repo() -> Repo:
