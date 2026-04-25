@@ -6,6 +6,12 @@ CLI that creates a git commit from your **staged** changes, using a
 Nothing runs in the background: each `commi` invocation loads the model,
 generates one line, and exits.
 
+## Attention ⚠️
+
+- In development.  
+- May not work as you expect and may cause errors.
+- VIBE CODE ONLY
+
 ## Requirements
 
 - Python 3.10+
@@ -23,11 +29,6 @@ Example output:
 ```text
 The commit was created successfully with the message "fix: some bug"
 ```
-
-## Attention
-
-- In development.  
-- May not work as you expect and may cause errors.
 
 ## draft
 
