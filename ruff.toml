@@ -34,7 +34,9 @@ ignore = [
 external = [ "WPS" ]
 
 [lint.extend-per-file-ignores]
-"tests/*" = []
+"tests/*" = [
+    "S101"
+]
 
 [format]
 skip-magic-trailing-comma = false
