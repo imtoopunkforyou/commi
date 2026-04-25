@@ -2,6 +2,11 @@
 
 CLI that creates a git commit from your **staged** changes, using a **local** GGUF model and [llama.cpp](https://github.com/ggml-org/llama.cpp) (`llama-cli`). Nothing runs in the background: each `commi` invocation starts `llama-cli`, generates one line, then exits.
 
+
+# ⚠️ Attention
+- In development.  
+- May not work as you expect and may cause errors.
+
 ## Requirements
 
 - Node.js 18+
@@ -53,3 +58,4 @@ The commit was created successfully with the message "fix: handle empty input"
 ## Status
 
 In development. May not behave as you expect.
+model: https://huggingface.co/Tavernari/git-commit-message
