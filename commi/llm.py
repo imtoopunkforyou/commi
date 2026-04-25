@@ -1,5 +1,6 @@
 """LLM integration based on llama-cpp-python."""
 
+import re
 from pathlib import Path
 from typing import Any, cast
 
@@ -10,6 +11,12 @@ from commi.execptions import LlmError
 N_CTX = 4_096
 MAX_TOKENS = 64
 TEMPERATURE = 0
+DEFAULT_COMMIT_MESSAGE = 'chore: update files'
+COMMIT_MESSAGE_PATTERN = re.compile(
+    r'^(feat|fix|refactor|docs|test|chore|perf|build|ci|style): '
+    r'[a-z0-9][a-z0-9 -]{1,57}[a-z0-9]$'
+)
+MAX_COMMIT_MESSAGE_LENGTH = 60
 
 
 def _read_system_prompt() -> str:
@@ -74,7 +81,51 @@ def _extract_message(response: dict[str, Any]) -> str:
         normalized = normalized.split(':', maxsplit=1)[1].strip()
     if not normalized:
         raise LlmError.empty_message()
-    return normalized
+    return _normalize_commit_message(normalized)
+
+
+def _normalize_commit_message(message: str) -> str:
+    text = ' '.join(message.split())
+    text = text.strip('"\'`').strip()
+    text = text.rstrip('.,;!?')
+    text = text.lower()
+
+    if ':' not in text:
+        return DEFAULT_COMMIT_MESSAGE
+
+    commit_type, summary = text.split(':', maxsplit=1)
+    commit_type = commit_type.strip()
+    summary = summary.strip()
+
+    allowed_types = {
+        'feat',
+        'fix',
+        'refactor',
+        'docs',
+        'test',
+        'chore',
+        'perf',
+        'build',
+        'ci',
+        'style',
+    }
+    if commit_type not in allowed_types:
+        return DEFAULT_COMMIT_MESSAGE
+
+    # Keep only characters allowed by the strict validation regex.
+    summary = re.sub(r'[^a-z0-9 -]+', '', summary)
+    summary = ' '.join(summary.split()).strip('- ').strip()
+
+    candidate = f'{commit_type}: {summary}'
+    if len(candidate) > MAX_COMMIT_MESSAGE_LENGTH:
+        max_summary_length = MAX_COMMIT_MESSAGE_LENGTH - len(commit_type) - 2
+        summary = summary[:max_summary_length].rstrip(' -')
+        candidate = f'{commit_type}: {summary}'
+
+    if COMMIT_MESSAGE_PATTERN.fullmatch(candidate):
+        return candidate
+
+    return DEFAULT_COMMIT_MESSAGE
 
 
 def generate_commit_message(diff: str, model_path: str) -> str:

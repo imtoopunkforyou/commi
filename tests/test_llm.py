@@ -56,3 +56,49 @@ def test_generate_commit_message_fails_on_empty_content(
             diff='diff --git a/a.py b/a.py',
             model_path='/model/commi_model.gguf',
         )
+
+
+def test_generate_commit_message_normalizes_output(
+    monkeypatch: MonkeyPatch,
+) -> None:
+    """Should normalize valid output to strict one-line format."""
+
+    class _NoisyLlama(_FakeLlama):
+        def create_completion(self, **_: object) -> dict[str, object]:
+            return {
+                'choices': [
+                    {
+                        'text': (
+                            'Commit message: Fix: Correct    issue!!!\nExtra'
+                        ),
+                    },
+                ],
+            }
+
+    monkeypatch.setattr(llm_module, 'Llama', _NoisyLlama)
+
+    message = llm_module.generate_commit_message(
+        diff='diff --git a/a.py b/a.py',
+        model_path='/model/commi_model.gguf',
+    )
+
+    assert message == 'fix: correct issue'
+
+
+def test_generate_commit_message_falls_back_for_invalid_type(
+    monkeypatch: MonkeyPatch,
+) -> None:
+    """Should use fallback for invalid commit type."""
+
+    class _InvalidTypeLlama(_FakeLlama):
+        def create_completion(self, **_: object) -> dict[str, object]:
+            return {'choices': [{'text': 'improve: make code better'}]}
+
+    monkeypatch.setattr(llm_module, 'Llama', _InvalidTypeLlama)
+
+    message = llm_module.generate_commit_message(
+        diff='diff --git a/a.py b/a.py',
+        model_path='/model/commi_model.gguf',
+    )
+
+    assert message == 'chore: update files'
