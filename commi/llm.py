@@ -5,8 +5,8 @@ from typing import Any, cast
 
 from llama_cpp import Llama
 
-from commi.constants import PROMT
-from commi.execptions import LlmError
+from commi.constants import PROMPT
+from commi.exceptions import LlmError
 
 N_CTX = 4_096
 MAX_TOKENS = 64
@@ -15,7 +15,7 @@ MAX_COMMIT_MESSAGE_LENGTH = 60
 
 
 def _build_prompt(diff: str) -> str:
-    prompt = PROMT.read_text(encoding='utf-8').splitlines()
+    prompt = PROMPT.read_text(encoding='utf-8').splitlines()
     content_lines = [
         line for line in prompt if line and not line.startswith('#')
     ]

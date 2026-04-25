@@ -14,7 +14,7 @@ lint:
 	&& poetry run ruff check ./commi ./tests \
 	&& poetry run flake8 ./commi \
 	&& make mypy \
-	&& poetry run codespell --skip="*.lock,./htmlcov," -L PROMT \
+	&& poetry run codespell --skip="*.lock,./htmlcov," \
 	&& poetry run pymarkdown scan .
 
 .PHONY: tests

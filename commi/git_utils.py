@@ -5,7 +5,7 @@ from typing import cast
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError
 
-from commi.execptions import (
+from commi.exceptions import (
     GitCommitCreateError,
     GitDiffReadError,
     GitRepositoryNotFoundError,

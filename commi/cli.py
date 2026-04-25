@@ -6,7 +6,7 @@ from typing import NoReturn
 import typer
 
 from commi.constants import MODEL_PATH
-from commi.execptions import CommiRunError, GitError, LlmError
+from commi.exceptions import CommiRunError, GitError, LlmError
 from commi.git_utils import create_commit, read_staged_diff
 from commi.llm import generate_commit_message
 
