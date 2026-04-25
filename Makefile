@@ -1,4 +1,4 @@
-.PHONY: strict lint fix typecheck
+.PHONY: strict lint fix typecheck build
 
 strict:
 	npm run check:strict
@@ -11,3 +11,6 @@ fix:
 
 typecheck:
 	npm run typecheck
+
+build:
+	npm run build

@@ -8,6 +8,7 @@
     "src/**/*.tsx",
     "scripts/**/*.ts",
     "scripts/**/*.tsx",
-    "eslint.config.mjs"
+    "eslint.config.mjs",
+    "tsup.config.ts"
   ]
 }
