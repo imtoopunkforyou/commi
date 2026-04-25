@@ -1,23 +1,29 @@
 """LLM integration based on llama-cpp-python."""
 
+from pathlib import Path
 from typing import Any, cast
 
 from llama_cpp import Llama
 
 from commi.execptions import LlmError
 
-SYSTEM_PROMPT = (
-    'You are a helpful assistant that writes git commit messages. '
-    'Return only one short commit message in Conventional Commits style. '
-    'No quotes, no markdown, no explanations.'
-)
 N_CTX = 4_096
 MAX_TOKENS = 64
 TEMPERATURE = 0
 
 
+def _read_system_prompt() -> str:
+    prompt_path = Path(__file__).resolve().parent / 'PROMT.md'
+    prompt_lines = prompt_path.read_text(encoding='utf-8').splitlines()
+    content_lines = [
+        line for line in prompt_lines if line and not line.startswith('#')
+    ]
+    return '\n'.join(content_lines).strip()
+
+
 def _build_prompt(diff: str) -> str:
-    return f'{SYSTEM_PROMPT}\n\nGit diff:\n\n{diff}\n\nCommit message:'
+    system_prompt = _read_system_prompt()
+    return f'{system_prompt}\n\nGit diff:\n\n{diff}\n\nCommit message:'
 
 
 def _prepare_diff(diff: str, max_diff_chars: int) -> str:
