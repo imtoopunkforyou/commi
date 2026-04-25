@@ -70,7 +70,6 @@ def _attempt_completion(llm: Llama, diff: str, max_diff_chars: int) -> object:
         prompt=_build_prompt(_prepare_diff(diff, max_diff_chars)),
         max_tokens=MAX_TOKENS,
         temperature=TEMPERATURE,
-        stop=['\n'],
     )
 
 
@@ -100,9 +99,12 @@ def _extract_message(response: dict[str, Any]) -> str:
         raise LlmError.invalid_response() from error
     if not isinstance(message, str):
         raise LlmError.invalid_response()
-    lines = message.strip().splitlines()
-    first_line = lines[0] if lines else ''
+    lines = message.splitlines()
+    non_empty_lines = [line for line in lines if line.strip()]
+    first_line = non_empty_lines[0] if non_empty_lines else ''
     normalized = first_line.strip().strip('"\'`').strip()
+    if normalized.lower().startswith('commit message:'):
+        normalized = normalized.split(':', maxsplit=1)[1].strip()
     if not normalized:
         raise LlmError.empty_message()
     return normalized
