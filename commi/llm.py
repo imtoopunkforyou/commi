@@ -30,7 +30,7 @@ def _read_system_prompt() -> str:
 
 def _build_prompt(diff: str) -> str:
     system_prompt = _read_system_prompt()
-    return f'{system_prompt}\n\nGit diff:\n\n{diff}\n\nCommit message:'
+    return f'{system_prompt}\n\nGit diff:\n\n{diff}\n\n'
 
 
 def _prepare_diff(diff: str, max_diff_chars: int) -> str:
