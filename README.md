@@ -21,7 +21,7 @@ generates one line, and exits.
 
 ```bash
 git add .
-poetry run commi
+commi
 ```
 
 Example output:
