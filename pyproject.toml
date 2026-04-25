@@ -34,14 +34,19 @@ keywords = [
 python = "^3.10"
 typer = "^0.24.2"
 llama-cpp-python = "^0.3.20"
+gitpython = "^3.1.47"
+
+[tool.poetry.scripts]
+commi = "commi.cli:main"
 
 [tool.poetry.group.lint.dependencies]
 ruff= "^0.15.12"
 wemake-python-styleguide="^1.6.1"
 flake8-digit-separator="^1.0.6"
 codespell="^2.4.2"
-pymarkdown="^0.1.4"
 mypy="^1.20.2"
+pydantic = "^2.13.3"
+pymarkdownlnt = "^0.9.36"
 
 [tool.poetry.group.tests.dependencies]
 pytest="^9.0.3"

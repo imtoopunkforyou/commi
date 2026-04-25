@@ -1,12 +1,35 @@
 # commi
 
-CLI that creates a git commit from your **staged** changes, using a **local** GGUF model and [llama.cpp](https://github.com/ggml-org/llama.cpp) (`llama-cli`). Nothing runs in the background: each `commi` invocation starts `llama-cli`, generates one line, then exits.
+CLI that creates a git commit from your **staged** changes, using a
+**local** GGUF model via
+[llama-cpp-python](https://github.com/abetlen/llama-cpp-python).
+Nothing runs in the background: each `commi` invocation loads the model,
+generates one line, and exits.
 
+## Requirements
 
-# ⚠️ Attention
+- Python 3.10+
+- Local model at `~/.config/commi/commi_model.gguf`
+
+## Usage
+
+```bash
+git add .
+poetry run commi
+```
+
+Example output:
+
+```text
+The commit was created successfully with the message "fix: some bug"
+```
+
+## Attention
+
 - In development.  
 - May not work as you expect and may cause errors.
 
 ## draft
-model: https://huggingface.co/Tavernari/git-commit-message
-llama: https://github.com/ggml-org/llama.cpp
+
+- model: [Tavernari/git-commit-message](https://huggingface.co/Tavernari/git-commit-message)
+- llama: [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp)
