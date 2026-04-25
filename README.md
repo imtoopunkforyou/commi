@@ -9,3 +9,4 @@ CLI that creates a git commit from your **staged** changes, using a **local** GG
 
 ## draft
 model: https://huggingface.co/Tavernari/git-commit-message
+llama: https://github.com/ggml-org/llama.cpp
